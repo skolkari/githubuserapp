@@ -1,0 +1,30 @@
+.Following-Avatar {
+  height: 150px;
+  width: 150px;
+}
+
+.Following-Profile {
+  display: flex;
+    padding: 20px;
+}
+
+.Following-Details {
+  padding-left: 30px;
+  text-align: left;
+  line-height: 30px;
+}
+
+.Following-Data {
+  display: flex;
+  padding: 5px;
+}
+
+.Data-Name {
+  min-width: 150px;
+  font-weight: 600;
+  text-align: left;
+}
+
+.Separator {
+  min-width: 30px;
+}

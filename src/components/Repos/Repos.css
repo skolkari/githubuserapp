@@ -1,0 +1,31 @@
+.Repos-Avatar {
+  height: 150px;
+  width: 150px;
+}
+
+.Repos-Profile {
+  display: flex;
+  min-height: 85vh;
+    padding: 50px;
+}
+
+.Repos-Details {
+  padding-left: 30px;
+  text-align: left;
+  line-height: 30px;
+}
+
+.Repos-Data {
+  display: flex;
+  padding: 5px;
+}
+
+.Data-Name {
+  min-width: 150px;
+  font-weight: 600;
+  text-align: left;
+}
+
+.Separator {
+  min-width: 30px;
+}
