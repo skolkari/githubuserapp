@@ -1,38 +1,17 @@
 import React from "react";
 import { connect } from 'react-redux';
 import "./User.css";
-
-import * as actions from "../../actions/actions";
+import { isEmpty } from "lodash";
 
 class User extends React.Component {
-  constructor(props) {
-    super(props);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  componentDidMount() {
-    console.log('component mounted');
-    const { params } = this.props.match;
-    console.log("user params 11", params);
-    fetch(`http://localhost:8080/user/details/${params.id}`)
-      .then(response => response.json())
-      .then(data => {
-        console.log("data ~~~~ => ", data);
-        this.props.updateUserDetails(data);
-      });
-  }
-
-  handleSubmit(event) {
-    event.preventDefault();
-  }
 
   render() {
-
     const user = this.props.user;
+    console.log('this.props ===> ', this.props);
 
     return (
       <div className="User">
-        {this.props.user.details && (
+        {!isEmpty(this.props.user.details) && (
           <div className="User-Profile">
             <div className="User-Image">
               <img
@@ -60,6 +39,9 @@ class User extends React.Component {
             </div>
           </div>
         )}
+        {isEmpty(this.props.user.details) && (
+          <div>User Not Found</div>
+        )}
       </div>
     );
   }
@@ -69,8 +51,4 @@ const mapStateToProps = state => ({
   user: state.user
 })
 
-const mapDispatchToProps = dispatch => ({
-  updateUserDetails: details => dispatch(actions.updateUserDetails(details))
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(User)
+export default connect(mapStateToProps)(User)

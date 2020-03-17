@@ -1,3 +1,8 @@
+.Following {
+  max-height: 50vh;
+  overflow: auto;
+}
+
 .Following-Avatar {
   height: 150px;
   width: 150px;
@@ -6,6 +11,12 @@
 .Following-Profile {
   display: flex;
     padding: 20px;
+}
+
+.Following-Nousers {
+  display: flex;
+  justify-content: center;
+    padding: 50px;
 }
 
 .Following-Details {
@@ -27,4 +38,16 @@
 
 .Separator {
   min-width: 30px;
+}
+
+.Loading {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0.5;
+  background: black;
 }

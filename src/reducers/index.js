@@ -8,7 +8,7 @@ const initialState = {
     following: []
   },
   userName: '',
-  activeTab: '',
+  activeTab: 'Profile',
   followingCount: 10
 };
 
@@ -24,6 +24,7 @@ export default function UserReducer(state = initialState, action) {
     case actions.USER_DETAILS:
       newState.user.details = action.data;
       newState.userName = action.data.login;
+      newState.activeTab = 'Profile';
       return newState;
     case actions.USER_REPOS:
       newState.user.repos = action.data;

@@ -2,28 +2,44 @@ import React from "react";
 import { connect } from "react-redux";
 import * as actions from "../../actions/actions";
 import "./Repos.css";
+import loader from "../../assets/icons/loading.gif";
 
 class Repos extends React.Component {
   constructor(props) {
     super(props);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.state = {
+      dataFetched: false,
+      reposFound: true
+    }
   }
 
   componentDidMount() {
+    this.setState({
+      dataFetched: false
+    });
     const { params } = this.props.match;
     console.log("user params 11", params);
     fetch(`http://localhost:8080/user/repos/${params.id}`)
       .then(response => response.json())
       .then(data => {
         if (data && data.length > 0) {
+          this.setState({
+            dataFetched: true,
+            reposFound: true
+          });
           console.log("data ~~~~ => ", data[0]);
           this.props.updateUserRepos(data[0]);
+        } else {
+          this.setState({
+            dataFetched: true,
+            reposFound: false
+          });
         }
       });
   }
 
-  handleSubmit(event) {
-    event.preventDefault();
+  componentDidUpdate() {
+    console.log('repos updated');
   }
 
   render() {
@@ -35,7 +51,10 @@ class Repos extends React.Component {
 
     return (
       <div className="Repos">
-        {this.props.user.repos && (
+        {!this.state.dataFetched && (<div className="Loading">
+          <img src={loader} alt="loading" />
+        </div>)}
+        {this.state.dataFetched && this.state.reposFound && (
           <div className="Repos-Profile">
             <div className="Repos-Image">
               <img
@@ -46,11 +65,19 @@ class Repos extends React.Component {
             </div>
             {
               <div className="Repos-Details">
-                User {this.props.user.details.name} ({this.props.user.details.login}) with {this.props.user.details.followers} is following {this.props.user.details.following}.
+                User <span className="Highlight">{this.props.user.details.name} ({this.props.user.details.login}) </span> 
+                with <span className="Highlight">{this.props.user.details.followers}</span> followers is 
+                following <span className="Highlight">{this.props.user.details.following}</span>.
                 <br></br>
-                One repo for this user is {this.props.user.repos.full_name} and it is {this.props.user.repos.full_name ? 'private': 'not private'}
+                One repo for this user is <span className="Highlight">{this.props.user.repos.full_name}</span> 
+                and it is <span className="Highlight">{this.props.user.repos.full_name ? 'private': 'not private'}</span>
               </div>
             }
+          </div>
+        )}
+        {this.state.dataFetched && !this.state.reposFound && (
+          <div className="Repos-Norepos">
+            No Repos Available for this User
           </div>
         )}
       </div>

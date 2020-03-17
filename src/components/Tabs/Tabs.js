@@ -3,25 +3,18 @@ import Tab from "./Tab";
 import "./Tabs.css";
 
 class Tabs extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      activeTab: this.props.children[0].props.label
-    };
-  }
 
   onClickTabItem = tab => {
-    this.setState({ activeTab: tab });
     this.props.onClick(tab);
   };
 
   render() {
     const {
       onClickTabItem,
-      props: { children },
-      state: { activeTab }
+      props: { children, activeTab }
     } = this;
+
+    console.log('activeTab => ', activeTab);
 
     return (
       <div className="tabs">

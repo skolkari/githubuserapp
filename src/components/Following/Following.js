@@ -2,26 +2,41 @@ import React from "react";
 import { connect } from "react-redux";
 import "./Following.css";
 import * as actions from "../../actions/actions";
+import loader from "../../assets/icons/loading.gif";
 
 class Following extends React.Component {
   constructor(props) {
     super(props);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.state = {
+      dataFetched: false,
+      followingMembersFound: true
+    }
   }
 
   componentDidMount() {
+    this.setState({
+      dataFetched: false
+    });
     const { params } = this.props.match;
     console.log("user params 11", params);
     fetch(`http://localhost:8080/user/following/${params.id}`)
       .then(response => response.json())
       .then(data => {
-        console.log("data ~~~~ => ", data);
-        this.props.updateUserFollowing(data);
-      });
-  }
+        if (data && data.length > 0) {
+          this.setState({
+            dataFetched: true,
+            followingMembersFound: true
+          });
+          console.log("data ~~~~ => ", data);
+          this.props.updateUserFollowing(data);
+        } else {
+          this.setState({
+            dataFetched: true,
+            followingMembersFound: false
+          });
+        }
 
-  handleSubmit(event) {
-    event.preventDefault();
+      });
   }
 
   renderFollowingUser(followingUser, i) {
@@ -48,12 +63,21 @@ class Following extends React.Component {
   render() {
     const { params } = this.props.match;
     console.log("user params", params);
-    console.log("this.props => ", this.props);
+    console.log("this.props following => ", this.props);
 
     return (
       <div className="Following">
-        {this.props.user.following &&
-          this.props.user.following.map((followingUser, i) => this.renderFollowingUser(followingUser, i))}
+         {!this.state.dataFetched && (<div className="Loading">
+          <img src={loader} alt="loading" />
+        </div>)}
+        {this.state.dataFetched && this.state.followingMembersFound &&
+          this.props.user.following.map((followingUser, i) => this.renderFollowingUser(followingUser, i))
+        }
+        {this.state.dataFetched && !this.state.followingMembersFound && (
+          <div className="Following-Nousers">
+            User Following 0 members
+          </div>
+        )}
       </div>
     );
   }
