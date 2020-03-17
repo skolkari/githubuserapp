@@ -25,7 +25,7 @@ router.get("/details/:userId", function(req, res) {
 });
 
 // define get user details route
-router.get("/following/:userId", function(req, res) {
+router.get("/following/:userId/:fetchCount", function(req, res) {
   let options = {
     url: 'https://api.github.com/users/' + req.params.userId + '/following',
     headers: {
@@ -39,7 +39,7 @@ router.get("/following/:userId", function(req, res) {
     }
     let repos = [];
     repos = JSON.parse(body);
-    repos = repos.splice(0, 10);
+    repos = repos.splice(0, req.params.fetchCount);
     res.send(repos);
   });
 });

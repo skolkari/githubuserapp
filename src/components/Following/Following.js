@@ -10,16 +10,18 @@ class Following extends React.Component {
     this.state = {
       dataFetched: false,
       followingMembersFound: true
-    }
+    };
   }
 
   componentDidMount() {
+    console.log('component mounted => ', this.props.count);
+    
     this.setState({
       dataFetched: false
     });
     const { params } = this.props.match;
     console.log("user params 11", params);
-    fetch(`http://localhost:8080/user/following/${params.id}`)
+    fetch(`http://localhost:8080/user/following/${params.id}/${this.props.count}`)
       .then(response => response.json())
       .then(data => {
         if (data && data.length > 0) {
@@ -29,13 +31,13 @@ class Following extends React.Component {
           });
           console.log("data ~~~~ => ", data);
           this.props.updateUserFollowing(data);
+          this.props.updateFollowingCount(this.props.count + 10);
         } else {
           this.setState({
             dataFetched: true,
             followingMembersFound: false
           });
         }
-
       });
   }
 
@@ -67,16 +69,18 @@ class Following extends React.Component {
 
     return (
       <div className="Following">
-         {!this.state.dataFetched && (<div className="Loading">
-          <img src={loader} alt="loading" />
-        </div>)}
-        {this.state.dataFetched && this.state.followingMembersFound &&
-          this.props.user.following.map((followingUser, i) => this.renderFollowingUser(followingUser, i))
-        }
-        {this.state.dataFetched && !this.state.followingMembersFound && (
-          <div className="Following-Nousers">
-            User Following 0 members
+        {!this.state.dataFetched && (
+          <div className="Loading">
+            <img src={loader} alt="loading" />
           </div>
+        )}
+        {this.state.dataFetched &&
+          this.state.followingMembersFound &&
+          this.props.user.following.map((followingUser, i) =>
+            this.renderFollowingUser(followingUser, i)
+          )}
+        {this.state.dataFetched && !this.state.followingMembersFound && (
+          <div className="Following-Nousers">User Following 0 members</div>
         )}
       </div>
     );
@@ -84,12 +88,13 @@ class Following extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  user: state.user
+  user: state.user,
+  count: state.followingCount
 });
 
 const mapDispatchToProps = dispatch => ({
-  updateUserFollowing: followingData =>
-    dispatch(actions.updateUserFollowing(followingData))
+  updateUserFollowing: followingData => dispatch(actions.updateUserFollowing(followingData)),
+  updateFollowingCount: count => dispatch(actions.updateFollowingCount(count))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Following);

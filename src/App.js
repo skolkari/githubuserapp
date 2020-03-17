@@ -84,6 +84,7 @@ class App extends React.Component {
 
   render() {
     console.log("histpry => ", this.props);
+    console.log("state => ", this.state);
     return (
       <div className="App">
         {!this.state.dataFetched && (<div className="Loading">
@@ -107,25 +108,23 @@ class App extends React.Component {
           </form>
         </div>
         {
-          this.state.dataFetched && !this.state.error && this.props.userName && (
-            <div>
-              {this.state.userFound && (
-                <Tabs activeTab={this.props.activeTab} onClick={this.handleTabChange}>
-                  <div label="Profile" routerLink={`/user/details/${this.props.userName}`}>
-                    <Route path="/user/details/:id" component={User} />
-                  </div>
-                  <div label="Repos" routerLink={`/user/repos/${this.props.userName}`} >
-                    <Route path="/user/repos/:id" component={Repos} />
-                  </div>
-                  <div label="Following" routerLink={`/user/following/${this.props.userName}`}>
-                    <Route exact path="/user/following/:id" component={Following} />
-                  </div>
-                </Tabs>
-              )}
-              {!this.state.userFound && (
-                <div>User Not Found</div>
-              )}
+          this.state.dataFetched && !this.state.error && this.props.userName && this.state.userFound && (
+            <Tabs activeTab={this.props.activeTab} onClick={this.handleTabChange}>
+              <div label="Profile" routerLink={`/user/details/${this.props.userName}`}>
+                <Route path="/user/details/:id" component={User} />
               </div>
+              <div label="Repos" routerLink={`/user/repos/${this.props.userName}`} >
+                <Route path="/user/repos/:id" component={Repos} />
+              </div>
+              <div label="Following" routerLink={`/user/following/${this.props.userName}`}>
+                <Route exact path="/user/following/:id" component={Following} />
+              </div>
+            </Tabs>
+          )
+        }
+        {
+          this.state.dataFetched && !this.state.error && !this.state.userFound && (
+            <div>User Not Found</div>
           )
         }
         {
